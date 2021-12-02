@@ -106,7 +106,29 @@ fn quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]) {
 
     // Now choose a pivot and do the organizing.
     
-    // ...
+    fn swap<T>(a: isize, b: isize){
+        let t = &a;
+        let a = &b;
+        let b = t;
+    }
+
+    fn partition<T: PartialOrd >(v: &mut [T], low: isize, high: isize)-> isize{
+        let pivot = high;
+        let mut i = &low -1;
+        let j = &low;
+        
+        for j in 0..high -1 {
+            if v[j as usize] <= v[pivot as usize]{
+                i += 1;
+                v.swap(i as usize,j as usize);
+            }
+        }
+        let lowplus = &low+1;
+        v.swap(lowplus as usize,high as usize);
+        lowplus
+    }
+
+    
 
     let smaller = 0; // Totally wrong – you should fix this.
 
