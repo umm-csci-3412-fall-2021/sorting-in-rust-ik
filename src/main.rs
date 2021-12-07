@@ -98,47 +98,56 @@ fn quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]) {
     // end up with infinite recursion.)
 
     let length = v.len();
+    let first = 0;
+    let last = length;
     // If the array has 0 or 1 elements it's already sorted
     // and we'll just stop.
     if length < 2 {
         return;
     }
+    if first >= last {
+        return;
+    }
+    let pivot = partition(&mut v[first..last]);
+
+    quicksort(&mut v[first .. pivot-1]);
+    quicksort(&mut v[pivot+1 .. last]);
 
     // Now choose a pivot and do the organizing.
     
-    fn swap<T>(a: isize, b: isize){
-        let t = &a;
-        let a = &b;
-        let b = t;
-    }
-
-    fn partition<T: PartialOrd >(v: &mut [T], low: isize, high: isize)-> isize{
-        let pivot = high;
-        let mut i = &low -1;
-        let j = &low;
-        
-        for j in 0..high -1 {
-            if v[j as usize] <= v[pivot as usize]{
-                i += 1;
-                v.swap(i as usize,j as usize);
-            }
-        }
-        let lowplus = &low+1;
-        v.swap(lowplus as usize,high as usize);
-        lowplus
-    }
+    
 
     
 
-    let smaller = 0; // Totally wrong – you should fix this.
 
     // Sort all the items < pivot
-    quicksort(&mut v[0..smaller]);
+    //quicksort(&mut v[0..smaller]);
     // Sort all the items ≥ pivot, *not* including the
     // pivot value itself. If we don't include the +1
     // here you can end up in infinite recursions.
-    quicksort(&mut v[smaller+1..length]);
+    //quicksort(&mut v[smaller+1..length]);
 }
+
+fn partition<T: PartialOrd + std::fmt::Debug>(v: &mut [T])-> usize{
+    let length = v.len();
+    let low = 0;
+    let high = length;
+    let pivot = high as usize;
+    let mut i = &low +0;
+
+    println!("v = {:?} and length = {}", v, length);
+    
+    for j in 0..high {
+        if v[j] <= v[high-1]{
+            v.swap(low,j);
+            i += 1;
+        }
+        i += 1;
+    }
+    v.swap(i, pivot);
+    i as usize
+}
+
 
 // Merge sort can't be done "in place", so it needs to return a _new_
 // Vec<T> of the sorted elements. The array elements need to have
