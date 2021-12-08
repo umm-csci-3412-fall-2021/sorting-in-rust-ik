@@ -82,7 +82,7 @@ fn insertion_sort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]) {
 //
 // Note that the parameter v *has* to be mutable because we're 
 // modifying it in place.
-fn quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]){
+fn quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]) {
     // Quicksort is a recursive solution where we select a pivot
     // value (usually just the first element) and split (in place)
     // the array into two sections: The "front" is all < the pivot,
@@ -99,7 +99,7 @@ fn quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]){
     let length = v.len();
     // If the array has 0 or 1 elements it's already sorted
     // and we'll just stop.
-    if length < 2{
+    if length < 2 {
         return;
     }
     // Otherwise, use the mini_quicksort helper function to
@@ -109,7 +109,7 @@ fn quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]){
 
 //Note: To follow the merge sort implementation, we'll be using 32-bit integers for our
 //first and last indices.
-fn mini_quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T], first: i32, last: i32){
+fn mini_quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T], first: i32, last: i32) {
     // To avoid Rust panicking from indices being out of bounds,
     // we've added a case where the first index must be less
     // than the last in order to proceed.
@@ -125,7 +125,7 @@ fn mini_quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T], first: i32, last
     }
 }
 
-fn partition<T: PartialOrd + std::fmt::Debug>(v: &mut [T], low: i32, high: i32) -> i32{
+fn partition<T: PartialOrd + std::fmt::Debug>(v: &mut [T], low: i32, high: i32) -> i32 {
     //Get the pivot and store it as a usize for uninterrupted sorting.
     let pivot = high as usize;
     // To sort correctly, the lowest index is one less than itself at the start.
