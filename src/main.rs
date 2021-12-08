@@ -125,6 +125,40 @@ fn mini_quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T], first: i32, last
     }
 }
 
+fn partition<T: PartialOrd + std::fmt::Debug>(v: &mut [T], low: i32, high: i32) -> i32{
+    //Get the pivot and store it as a usize for uninterrupted sorting.
+    let pivot = high as usize;
+    // To sort correctly, the lowest index is one less than itself at the start.
+    // The loop "corrects" this in the beginning with the starting line.
+    let mut i = low - 1;
+    // Meanwhile, the highest index is used as is to start for decrementation.
+    let mut j = high;
+
+    // For partitioning, a generic loop is used to determining the partition value.
+    loop {
+        i += 1;
+
+        while v[i as usize] < v[pivot] {
+            i += 1;
+        }
+
+        j -= 1;
+
+        while j >= 0 && v[j as usize] > v[pivot] {
+            j -= 1;
+        }
+
+        if i >= j {
+            break;
+        } else {
+            v.swap(i as usize, j as usize);
+        }
+    }
+
+    v.swap(i as usize, pivot as usize);
+    i
+}
+
 
 // Merge sort can't be done "in place", so it needs to return a _new_
 // Vec<T> of the sorted elements. The array elements need to have
