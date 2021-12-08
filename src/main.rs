@@ -218,15 +218,40 @@ fn merge<T: PartialOrd + std::marker::Copy + std::fmt::Debug>(xs: Vec<T>, ys: Ve
     //    <0, 2, 3, 5, 6, 8, 9>
     // You should be able to do this in linear time by having
     // two indices that point to where you are in xs and ys.
+    let mut x = 0;
+    let mut y = 0;
+    let x_length = xs.len();
+    let y_length = ys.len();
     // You then compare those values, push the smaller one onto
     // the result vector, and increment the appropriate index.
+    let mut zs = Vec::with_capacity(x_length+y_length);
+    let mut _z = 0;
+
+    while x < x_length && y < y_length {
+        if xs[x] < ys[y] {
+            zs.push(xs[x]);
+            x += 1;
+        } else {
+            zs.push(ys[y]);
+            y += 1;
+        }
+    }
     // You stop when one of your indices hits the end of its
     // vector, and then push all the remaining elements from the
     // other vector onto the result.
 
-    // This is totally wrong and will not sort. You should replace it
-    // with something useful. :)
-    xs
+
+    /*ERRONEOUS CODE*/
+    if x < x_length && y == y_length {
+        let xs_remainder = &xs[x..x_length];
+        zs.extend(xs_remainder);
+    }
+    if y < y_length && x == x_length {
+        let ys_remainder = &ys[y..y_length];
+        zs.extend(ys_remainder);
+    }
+    // This is totally right and will sort :)
+    zs
 }
 
 fn is_sorted<T: PartialOrd>(slice: &[T]) -> bool {
