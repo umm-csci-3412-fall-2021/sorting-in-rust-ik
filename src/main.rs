@@ -218,8 +218,12 @@ fn merge<T: PartialOrd + std::marker::Copy + std::fmt::Debug>(xs: Vec<T>, ys: Ve
     //    <0, 2, 3, 5, 6, 8, 9>
     // You should be able to do this in linear time by having
     // two indices that point to where you are in xs and ys.
+    let mut x = 0;
+    let mut y = 0;
     // You then compare those values, push the smaller one onto
     // the result vector, and increment the appropriate index.
+    let x_length = xs.len();
+    let y_length = ys.len();
     // You stop when one of your indices hits the end of its
     // vector, and then push all the remaining elements from the
     // other vector onto the result.
