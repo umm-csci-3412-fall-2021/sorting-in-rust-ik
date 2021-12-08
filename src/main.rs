@@ -16,9 +16,9 @@ fn main() {
 
     let mut w = v.clone();
     // println!("{:?}", &w);
-    let before_quicksort = Instant::now();
+    let beforemini_quicksort = Instant::now();
     quicksort(&mut w);
-    println!("Elapsed time for quicksort was {:?}.", before_quicksort.elapsed());
+    println!("Elapsed time for quicksort was {:?}.", beforemini_quicksort.elapsed());
     // println!("{:?}", &w);
 
     let before_merged = Instant::now();
@@ -96,56 +96,67 @@ fn quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T]) {
     // the back half. (You need the +1 to ensure that both slices
     // are smaller than the original array; without it you can
     // end up with infinite recursion.)
-
     let length = v.len();
-    let first = 0;
-    let last = length;
     // If the array has 0 or 1 elements it's already sorted
     // and we'll just stop.
     if length < 2 {
         return;
     }
-    if first >= last {
-        return;
-    }
-    let pivot = partition(&mut v[first..last]);
-
-    quicksort(&mut v[first .. pivot-1]);
-    quicksort(&mut v[pivot+1 .. last]);
-
-    // Now choose a pivot and do the organizing.
-    
-    
-
-    
-
-
-    // Sort all the items < pivot
-    //quicksort(&mut v[0..smaller]);
-    // Sort all the items ≥ pivot, *not* including the
-    // pivot value itself. If we don't include the +1
-    // here you can end up in infinite recursions.
-    //quicksort(&mut v[smaller+1..length]);
+    // Otherwise, use the mini_quicksort helper function to
+    // begin the sorting.
+    mini_quicksort(v, 0, (&length - 1) as i32);
 }
 
-fn partition<T: PartialOrd + std::fmt::Debug>(v: &mut [T])-> usize{
-    let length = v.len();
-    let low = 0;
-    let high = length;
-    let pivot = high as usize;
-    let mut i = &low +0;
+//Note: To follow the merge sort implementation, we'll be using 32-bit integers for our
+//first and last indices.
+fn mini_quicksort<T: PartialOrd + std::fmt::Debug>(v: &mut [T], first: i32, last: i32) {
+    // To avoid Rust panicking from indices being out of bounds,
+    // we've added a case where the first index must be less
+    // than the last in order to proceed.
+    if first < last {
+        // Now choose a pivot and do the organizing.
+        let pivot = partition(v, first, last);
+        // Sort all the items < pivot.
+        mini_quicksort(v, first, pivot - 1);
+        // Sort all the items ≥ pivot, *not* including the
+        // pivot value itself. If we don't include the +1
+        // here you can end up in infinite recursions.
+        mini_quicksort(v, pivot + 1, last);
+    }
+}
 
-    println!("v = {:?} and length = {}", v, length);
-    
-    for j in 0..high {
-        if v[j] <= v[high-1]{
-            v.swap(low,j);
+fn partition<T: PartialOrd + std::fmt::Debug>(v: &mut [T], low: i32, high: i32) -> i32 {
+    //Get the pivot and store it as a usize for uninterrupted sorting.
+    let pivot = high as usize;
+    // To sort correctly, the lowest index is one less than itself at the start.
+    // The loop "corrects" this in the beginning with the starting line.
+    let mut i = low - 1;
+    // Meanwhile, the highest index is used as is to start for decrementation.
+    let mut j = high;
+
+    // For partitioning, a generic loop is used to determining the partition value.
+    loop {
+        i += 1;
+
+        while v[i as usize] < v[pivot] {
             i += 1;
         }
-        i += 1;
+
+        j -= 1;
+
+        while j >= 0 && v[j as usize] > v[pivot] {
+            j -= 1;
+        }
+
+        if i >= j {
+            break;
+        } else {
+            v.swap(i as usize, j as usize);
+        }
     }
-    v.swap(i, pivot);
-    i as usize
+
+    v.swap(i as usize, pivot as usize);
+    i
 }
 
 
